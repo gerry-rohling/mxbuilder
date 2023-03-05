@@ -1,15 +1,18 @@
 import { create } from "xmlbuilder2";
+import { PlacementEngine } from "./PlacementEngine";
 
 export class MxBuilder {
     private doc: any;
     private rootNode: any;
     private rootParent = '1';
+    engine: PlacementEngine;
 
 
     constructor() {
+        this.engine = new PlacementEngine();
         this.doc = create({ version: '1.0', encoding: 'UTF-8' });
         this.doc.ele('mxfile', { agent: 'Structurizr DSL Plugin' });
-        var diagram = this.doc.root().ele('diagram', { name: 'Page-1', id: 'LazzyBrownDog' });
+        var diagram = this.doc.root().ele('diagram', { name: 'Page-1', id: 'LazyBrownDog' });
         var model = diagram.ele('mxGraphModel', { grid: '1', gridSize: '10', guides: '1', tooltips: '1', connect: '1', arrows: '1', fold: '1', page: '1', pageScale: '1', math: '0', shadow: '0'});
         this.rootNode = model.ele('root');
         this.rootNode.ele('mxCell', { id: '0' });
@@ -24,6 +27,7 @@ export class MxBuilder {
     }
 
     insertSoftwareSystem(c4Name: string, c4Description: string): string {
+        const {x,y} = this.engine.getPlacementCoordinates();
         const id = getID(22);
         const obj = this.rootNode.ele('object', { placeholders: '1', c4Type: 'Software System', c4Name: c4Name, c4Description: c4Description, label: this.getSoftwareSystemLabel(), id: id });
         const cell = obj.ele('mxCell', { style: this.getSoftwareSystemStyle(), vertex: '1', parent: '1'});
