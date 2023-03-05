@@ -1,0 +1,31 @@
+import { MxBuilder } from "../src/MxBuilder";
+
+describe('Testing MxBuilder', () => {
+    test('returns hello world', () => {
+        var mx = new MxBuilder();
+        var str = mx.toString();
+        expect(str).toBe("Hello world");
+    });
+
+    test('Returns framework XML', () => {
+        var mx = new MxBuilder();
+        var str = mx.toDiagram();
+        expect(str.indexOf('<?xml version="1.0" encoding="UTF-8"?>')).toBe(0);
+    });
+
+    test('Add Software System Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertSoftwareSystem('System Name', 'System Description');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
+
+    test('Add External Software System Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertExternalSoftwareSystem('External System Name', 'External System Description');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
+});
