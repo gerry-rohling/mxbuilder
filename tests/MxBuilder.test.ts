@@ -36,4 +36,12 @@ describe('Testing MxBuilder', () => {
         console.log(str);
         expect(id.length).toBe(22);
     });
+
+    test('Add Container Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertContainer('Container name', 'ElasticSearch', 'Description of Container');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
 });
