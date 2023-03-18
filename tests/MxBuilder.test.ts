@@ -60,4 +60,12 @@ describe('Testing MxBuilder', () => {
         console.log(str);
         expect(id.length).toBe(22);
     });
+
+    test('Add Relationship Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertRelationship('Make API Calls', 'JSON/HTTP', 'source_id', 'target_id');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
 });

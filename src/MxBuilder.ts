@@ -81,6 +81,18 @@ export class MxBuilder {
         return id;
     }
 
+    insertRelationship(c4Description: string, c4Technology: string, source: string, target: string): string {
+        const id = getID(22);
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
+        const cell = obj.ele('mxCell', {style: this.getRelationshipStyle(), parent: '1', source: source, target: target, edge: '1'});
+        // TODO: Work out location of item on page
+        const geo = cell.ele('mxGeometry', { width: '240', relative: '1', as: 'geometry'});
+        geo.ele('mxPoint', { x:'750', y:'890', as: 'sourcePoint'});
+        geo.ele('mxPoint', { x:'990', y:'890', as: 'targetPoint'});
+        return id;
+
+    }
+
     getSoftwareSystemLabel(): string {
         return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%]</div><br><div><font style="font-size: 11px"><font color="#cccccc">%c4Description%</font></div>';
     }
@@ -127,6 +139,14 @@ export class MxBuilder {
 
     getComponentStyle(): string {
         return 'rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#63BEF2;fontColor=#ffffff;align=center;arcSize=6;strokeColor=#2086C9;metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];';
+    }
+
+    getRelationshipLabel(): string {
+        return '<div style="text-align: left"><div style="text-align: center"><b>%c4Description%</b></div><div style="text-align: center">[%c4Technology%]</div></div>';
+    }
+
+    getRelationshipStyle(): string {
+        return 'endArrow=blockThin;html=1;fontSize=10;fontColor=#404040;strokeWidth=1;endFill=1;strokeColor=#828282;elbow=vertical;metaEdit=1;endSize=14;startSize=14;jumpStyle=arc;jumpSize=16;rounded=0;edgeStyle=orthogonalEdgeStyle;';
     }
 }
 
