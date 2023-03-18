@@ -63,6 +63,24 @@ export class MxBuilder {
         return id;
     }
 
+    insertContainerScopeBoundary(c4Name: string): string {
+        const id = getID(22);
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'ContainerScopeBoundary', c4Application: 'Container', label: this.getContainerScopeBoundaryLabel(), id: id});
+        const cell = obj.ele('mxCell', { style: this.getContainerScopeBoundaryStyle(), parent: '1', vertex: '1'});
+        // TODO: Work out location of item on page
+        cell.ele('mxGeometry', {x:'1040', y:'520', width: '360', height: '210', as: 'geometry'});
+        return id;
+    }
+
+    insertComponent(c4Name: string, c4Technology: string, c4Description: string): string {
+        const id = getID(22);
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'Component', c4Technology: c4Technology, c4Description: c4Description, label: this.getComponentLabel(), id: id});
+        const cell = obj.ele('mxCell', { style: this.getComponentStyle(), parent: '1', vertex: '1'});
+        // TODO: Work out location of item on page
+        cell.ele('mxGeometry', {x:'1100', y:'560', width:'240', height:'120', as: 'geometry'});
+        return id;
+    }
+
     getSoftwareSystemLabel(): string {
         return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%]</div><br><div><font style="font-size: 11px"><font color="#cccccc">%c4Description%</font></div>';
     }
@@ -93,6 +111,22 @@ export class MxBuilder {
 
     getContainerStyle(): string {
         return 'rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=#23A2D9;fontColor=#ffffff;align=center;arcSize=10;strokeColor=#0E7DAD;metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];';
+    }
+
+    getContainerScopeBoundaryLabel(): string {
+        return '<font style="font-size: 16px"><b><div style="text-align: left">%c4Name%</div></b></font><div style="text-align: left">[%c4Application%]</div>';
+    }
+
+    getContainerScopeBoundaryStyle(): string {
+        return 'rounded=1;fontSize=11;whiteSpace=wrap;html=1;dashed=1;arcSize=20;fillColor=none;strokeColor=#666666;fontColor=#333333;labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;dashPattern=8 4;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;noLabel=0;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];';
+    }
+
+    getComponentLabel(): string {
+        return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%: %c4Technology%]</div><br><div><font style="font-size: 11px">%c4Description%</font></div>';
+    }
+
+    getComponentStyle(): string {
+        return 'rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#63BEF2;fontColor=#ffffff;align=center;arcSize=6;strokeColor=#2086C9;metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];';
     }
 }
 

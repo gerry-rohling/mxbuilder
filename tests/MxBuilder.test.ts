@@ -44,4 +44,20 @@ describe('Testing MxBuilder', () => {
         console.log(str);
         expect(id.length).toBe(22);
     });
+
+    test('Add Container Scope Boundary Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertContainerScopeBoundary('Container name');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
+
+    test('Add Component Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertComponent('Component name', 'Node.js', 'Description of Component');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
 });
