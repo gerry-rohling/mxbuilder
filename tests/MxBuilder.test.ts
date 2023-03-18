@@ -28,4 +28,12 @@ describe('Testing MxBuilder', () => {
         console.log(str);
         expect(id.length).toBe(22);
     });
+
+    test('Add System Scope Boundary Object', () => {
+        var mx = new MxBuilder();
+        var id = mx.insertSystemScopeBoundary('System name');
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
 });
