@@ -1,3 +1,4 @@
+import { XMLParser } from "fast-xml-parser";
 import { MxBuilder } from "../src/MxBuilder";
 
 describe('Testing MxBuilder', () => {
@@ -66,6 +67,11 @@ describe('Testing MxBuilder', () => {
         var id = mx.insertRelationship('Make API Calls', 'JSON/HTTP', 'source_id', 'target_id');
         var str = mx.toDiagram();
         console.log(str);
+        const options = { ignoreAttributes: false };
+        const parser = new XMLParser(options);
+        let testObj = parser.parse(str);
         expect(id.length).toBe(22);
+        expect(testObj.mxfile.diagram.mxGraphModel.root.object.mxCell.mxGeometry.mxPoint[0]["@_as"]).toBe("sourcePoint");
+        expect(testObj.mxfile.diagram.mxGraphModel.root.object.mxCell.mxGeometry.mxPoint[1]["@_as"]).toBe("targetPoint");
     });
 });
