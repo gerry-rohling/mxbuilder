@@ -12,7 +12,7 @@ export class PlacementEngine {
     private graph: ElkNode;
 
     constructor() {
-        this.graph = <ElkNode>{id: 'root', properties: {'algorithm':'layered', 'elk.spacing.nodeModule': 40}, children: [], edges: []};
+        this.graph = <ElkNode>{id: 'root', properties: {'algorithm':'layered', 'elk.spacing.nodeModule': 40}, children: [], edges: [], labels: []};
         const child1 = <ElkNode>{id: 'n101', width: 240, height: 120};
         const child2 = <ElkNode>{id: 'n102', width: 240, height: 120};
         const child3 = <ElkNode>{id: 'n103', width: 240, height: 120};
