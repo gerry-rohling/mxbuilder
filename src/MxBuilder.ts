@@ -6,12 +6,14 @@ type point = {
     y: number
 };
 
+const RECTANGLE_WIDTH = 240;
+const RECTANGLE_HEIGHT = 120;
+
 export class MxBuilder {
     private doc: any;
     private rootNode: any;
     private rootParent = '1';
     engine: PlacementEngine;
-
 
     constructor() {
         this.engine = new PlacementEngine();
@@ -29,6 +31,18 @@ export class MxBuilder {
     }
     toString(): string {
         return "Hello world";
+    }
+
+    placeSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string) {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('SoftwareSystem', itemID, c4Name, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string) {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('ExternalSoftwareSystem', itemID, c4Name, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
     }
 
     drawSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {

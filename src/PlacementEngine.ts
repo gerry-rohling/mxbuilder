@@ -12,7 +12,7 @@ export class PlacementEngine {
     private graph: ElkNode;
 
     constructor() {
-        this.graph = <ElkNode>{id: 'root', properties: {'algorithm':'layered', 'elk.spacing.nodeModule': 40}, children: [], edges: [], labels: []};
+        this.graph = <ElkNode>{id: 'root', children: [], edges: [], labels: []};
         const child1 = <ElkNode>{id: 'n101', width: 240, height: 120};
         const child2 = <ElkNode>{id: 'n102', width: 240, height: 120};
         const child3 = <ElkNode>{id: 'n103', width: 240, height: 120};
@@ -25,8 +25,14 @@ export class PlacementEngine {
         this.graph.edges?.push(edge2);
     }
 
+    addNode(c4Type: string, itemID: string, c4Name: string, c4Description: string, width: number, height: number, parent?: string) {
+        const child = <ElkNode>{id: itemID, width: width, height: height };
+        // Need to store the c4 annotations. Label field? Lookup table by ID in MxBuilder?
+        this.graph.children?.push(child);
+    }
+
     async getLayout() {
-      const rez = await this.elk.layout(this.graph);
+      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered'} });
       return rez;
     }
 }
