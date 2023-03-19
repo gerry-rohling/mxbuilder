@@ -16,7 +16,7 @@ describe('Testing MxBuilder', () => {
 
     test('Add Software System Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertSoftwareSystem('System Name', 'System Description');
+        var id = mx.drawSoftwareSystem('System Name', 'System Description', 100, 200);
         var str = mx.toDiagram();
         console.log(str);
         expect(id.length).toBe(22);
@@ -24,7 +24,7 @@ describe('Testing MxBuilder', () => {
 
     test('Add External Software System Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertExternalSoftwareSystem('External System Name', 'External System Description');
+        var id = mx.drawExternalSoftwareSystem('External System Name', 'External System Description', 300, 500);
         var str = mx.toDiagram();
         console.log(str);
         expect(id.length).toBe(22);
@@ -32,7 +32,7 @@ describe('Testing MxBuilder', () => {
 
     test('Add System Scope Boundary Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertSystemScopeBoundary('System name');
+        var id = mx.drawSystemScopeBoundary('System name', 200, 400);
         var str = mx.toDiagram();
         console.log(str);
         expect(id.length).toBe(22);
@@ -40,7 +40,7 @@ describe('Testing MxBuilder', () => {
 
     test('Add Container Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertContainer('Container name', 'ElasticSearch', 'Description of Container');
+        var id = mx.drawContainer('Container name', 'ElasticSearch', 'Description of Container', 400, 500);
         var str = mx.toDiagram();
         console.log(str);
         expect(id.length).toBe(22);
@@ -48,7 +48,7 @@ describe('Testing MxBuilder', () => {
 
     test('Add Container Scope Boundary Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertContainerScopeBoundary('Container name');
+        var id = mx.drawContainerScopeBoundary('Container name', 500, 700);
         var str = mx.toDiagram();
         console.log(str);
         expect(id.length).toBe(22);
@@ -56,7 +56,7 @@ describe('Testing MxBuilder', () => {
 
     test('Add Component Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertComponent('Component name', 'Node.js', 'Description of Component');
+        var id = mx.drawComponent('Component name', 'Node.js', 'Description of Component', 200, 300);
         var str = mx.toDiagram();
         console.log(str);
         expect(id.length).toBe(22);
@@ -64,7 +64,9 @@ describe('Testing MxBuilder', () => {
 
     test('Add Relationship Object', () => {
         var mx = new MxBuilder();
-        var id = mx.insertRelationship('Make API Calls', 'JSON/HTTP', 'source_id', 'target_id');
+        var start = {x: 100, y: 200};
+        var end = {x: 500, y: 900};
+        var id = mx.drawRelationship('Make API Calls', 'JSON/HTTP', 'source_id', 'target_id', start, end);
         var str = mx.toDiagram();
         console.log(str);
         const options = { ignoreAttributes: false };

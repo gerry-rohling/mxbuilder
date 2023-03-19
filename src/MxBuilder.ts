@@ -1,6 +1,11 @@
 import { create } from "xmlbuilder2";
 import { PlacementEngine } from "./PlacementEngine";
 
+type point = {
+    x: number,
+    y: number
+};
+
 export class MxBuilder {
     private doc: any;
     private rootNode: any;
@@ -26,69 +31,63 @@ export class MxBuilder {
         return "Hello world";
     }
 
-    insertSoftwareSystem(c4Name: string, c4Description: string): string {
-        const {x,y} = this.engine.getPlacementCoordinates();
+    drawSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', { placeholders: '1', c4Type: 'Software System', c4Name: c4Name, c4Description: c4Description, label: this.getSoftwareSystemLabel(), id: id });
         const cell = obj.ele('mxCell', { style: this.getSoftwareSystemStyle(), vertex: '1', parent: '1'});
-        // TODO: work out location of item on page
-        cell.ele('mxGeometry', {x: '280', y: '320', width: '240', height: '120', as: 'geometry'});
+        cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    insertExternalSoftwareSystem(c4Name: string, c4Description: string): string {
+    drawExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', { placeholders: '1', c4Type: 'Software System', c4Name: c4Name, c4Description: c4Description, label: this.getExternalSoftwareSystemLabel(), id: id });
         const cell = obj.ele('mxCell', { style: this.getExternalSoftwareSystemStyle(), vertex: '1', parent: '1'});
-        // TODO: Work out location of item on page
-        cell.ele('mxGeometry', {x: '680', y: '320', width: '240', height: '120', as: 'geometry'});
+        cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    insertSystemScopeBoundary(c4Name: string): string {
+    drawSystemScopeBoundary(c4Name: string, x: number, y: number, width: number = 720, height: number = 210): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'SystemScopeBoundary', c4Name: c4Name, c4Application: 'Software System', label: this.getSystemScopeBoundaryLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getSystemScopeBoundaryStyle(), parent: '1', vertex: '1' });
-        // TODO: Work out location of item on page
-        cell.ele('mxGeometry', {x: '280', y: '520', width: '720', height: '210', as: 'geometry'});
+        cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    insertContainer(c4Name: string, c4Technology: string, c4Description: string) : string {
+    drawContainer(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120) : string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'Container', c4Technology: c4Technology, c4Description: c4Description, label: this.getContainerLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getContainerStyle(), parent: '1', vertex: '1'});
-        // TODO: Work out location of item on page
-        cell.ele('mxGeometry', {x: '320', y: '560', width: '240', height: '120', as: 'geometry'});
+        cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    insertContainerScopeBoundary(c4Name: string): string {
+    drawContainerScopeBoundary(c4Name: string, x: number, y: number, width: number = 360, height: number = 210): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'ContainerScopeBoundary', c4Application: 'Container', label: this.getContainerScopeBoundaryLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getContainerScopeBoundaryStyle(), parent: '1', vertex: '1'});
-        // TODO: Work out location of item on page
-        cell.ele('mxGeometry', {x:'1040', y:'520', width: '360', height: '210', as: 'geometry'});
+        cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    insertComponent(c4Name: string, c4Technology: string, c4Description: string): string {
+    drawComponent(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'Component', c4Technology: c4Technology, c4Description: c4Description, label: this.getComponentLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getComponentStyle(), parent: '1', vertex: '1'});
-        // TODO: Work out location of item on page
-        cell.ele('mxGeometry', {x:'1100', y:'560', width:'240', height:'120', as: 'geometry'});
+        cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as: 'geometry'});
         return id;
     }
 
-    insertRelationship(c4Description: string, c4Technology: string, source: string, target: string): string {
+    drawRelationship(c4Description: string, c4Technology: string, source: string, target: string, start: point, end: point): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
         const cell = obj.ele('mxCell', {style: this.getRelationshipStyle(), parent: '1', source: source, target: target, edge: '1'});
-        // TODO: Work out location of item on page
-        const geo = cell.ele('mxGeometry', { width: '240', relative: '1', as: 'geometry'});
-        geo.ele('mxPoint', { x:'750', y:'890', as: 'sourcePoint'});
-        geo.ele('mxPoint', { x:'990', y:'890', as: 'targetPoint'});
+        var cellWidth = Math.abs(start.x - end.x);
+        var cellHeight = Math.abs(start.y - end.y);
+        const geo = cell.ele('mxGeometry', { width: cellWidth, height: cellHeight, relative: '1', as: 'geometry'});
+        geo.ele('mxPoint', { x:start.x, y:start.y, as: 'sourcePoint'});
+        geo.ele('mxPoint', { x:end.x  , y:end.y,   as: 'targetPoint'});
         return id;
 
     }
