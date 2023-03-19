@@ -62,6 +62,22 @@ describe('Testing MxBuilder', () => {
         expect(id.length).toBe(22);
     });
 
+    test('Add Person', () => {
+        var mx = new MxBuilder();
+        var id = mx.drawPerson('Person name', 'Description of person', 200, 400);
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
+
+    test('Add External Person', () => {
+        var mx = new MxBuilder();
+        var id = mx.drawExternalPerson('Person name', 'Description of person', 200, 400);
+        var str = mx.toDiagram();
+        console.log(str);
+        expect(id.length).toBe(22);
+    });
+
     test('Add Relationship Object', () => {
         var mx = new MxBuilder();
         var start = {x: 100, y: 200};

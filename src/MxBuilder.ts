@@ -79,6 +79,22 @@ export class MxBuilder {
         return id;
     }
 
+    drawPerson(c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
+        const id = getID(22);
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, label:this.getPersonLabel(), id:id});
+        const cell = obj.ele('mxCell', {style:this.getPersonStyle(), parent:'1', vertex:'1'});
+        cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as:'geometry'});
+        return id;
+    }
+
+    drawExternalPerson(c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
+        const id = getID(22);
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, label:this.getExternalPersonLabel(), id:id});
+        const cell = obj.ele('mxCell', {style:this.getExternalPersonStyle(), parent:'1', vertex:'1'});
+        cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as:'geometry'});
+        return id;
+    }
+
     drawRelationship(c4Description: string, c4Technology: string, source: string, target: string, start: point, end: point): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
@@ -138,6 +154,22 @@ export class MxBuilder {
 
     getComponentStyle(): string {
         return 'rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#63BEF2;fontColor=#ffffff;align=center;arcSize=6;strokeColor=#2086C9;metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];';
+    }
+
+    getPersonLabel(): string {
+        return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%]</div><br><div><font style="font-size: 11px"><font color="#cccccc">%c4Description%</font></div>';
+    }
+
+    getPersonStyle(): string {
+        return 'html=1;fontSize=11;dashed=0;whiteSpace=wrap;fillColor=#083F75;strokeColor=#06315C;fontColor=#ffffff;shape=mxgraph.c4.person2;align=center;metaEdit=1;points=[[0.5,0,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0]];resizable=0;';
+    }
+
+    getExternalPersonLabel(): string {
+        return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%]</div><br><div><font style="font-size: 11px"><font color="#cccccc">%c4Description%</font></div>';
+    }
+
+    getExternalPersonStyle(): string {
+        return 'html=1;fontSize=11;dashed=0;whiteSpace=wrap;fillColor=#6C6477;strokeColor=#4D4D4D;fontColor=#ffffff;shape=mxgraph.c4.person2;align=center;metaEdit=1;points=[[0.5,0,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0]];resizable=0;';
     }
 
     getRelationshipLabel(): string {
