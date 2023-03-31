@@ -33,6 +33,8 @@ export class MxBuilder {
         return "Hello world";
     }
 
+    //#region Place Items
+
     placeSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string) {
         let itemID = id ?? getID(22);
         this.engine.addNode('SoftwareSystem', itemID, c4Name, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
@@ -44,6 +46,10 @@ export class MxBuilder {
         this.engine.addNode('ExternalSoftwareSystem', itemID, c4Name, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
+
+    //#endregion
+
+    //#region Draw Items
 
     drawSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const id = getID(22);
@@ -121,6 +127,8 @@ export class MxBuilder {
         return id;
 
     }
+
+    //#endregion
 
     getSoftwareSystemLabel(): string {
         return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%]</div><br><div><font style="font-size: 11px"><font color="#cccccc">%c4Description%</font></div>';
