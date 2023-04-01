@@ -35,15 +35,57 @@ export class MxBuilder {
 
     //#region Place Items
 
-    placeSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string) {
+    placeSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('SoftwareSystem', itemID, c4Name, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode('SoftwareSystem', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string) {
+    placeExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('ExternalSoftwareSystem', itemID, c4Name, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode('ExternalSoftwareSystem', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeSystemScopeBoundary(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('SystemScopeBoundary', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeContainer(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('Container', itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeContainerScopeBoundary(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('ContainerScopeBoundary', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeComponent(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('Component', itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placePerson(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('Person', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeExternalPerson(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode('ExternalPerson', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        return itemID;
+    }
+
+    placeRelationship(c4Description: string, c4Technology: string, source: string, target: string): string {
+        let itemID = getID(22);
+        this.engine.addEdge(itemID, c4Description, c4Technology, source, target);
         return itemID;
     }
 
