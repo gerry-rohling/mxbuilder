@@ -22,10 +22,6 @@ export class PlacementEngine {
     }
 
     addNode(c4Type: string, itemID: string, c4Name: string, c4Technology: string, c4Description: string, width: number, height: number, parent?: string) {
-        // Find parent
-        if (parent) {
-            const parents = this.graph.children?.filter(item => item.id === parent);
-        }
         const child = <ElkNode>{id: itemID, width: width, height: height, labels: [], children: [] };
         let typeLabel:c4label = { c4item: 'c4Type', payload: c4Type};
         let nameLabel:c4label = { c4item: 'c4Name', payload: c4Name };
@@ -39,7 +35,15 @@ export class PlacementEngine {
         child.labels?.push(label1);
         child.labels?.push(label2);
         child.labels?.push(label3);
-        this.graph.children?.push(child);
+        if (parent){
+            const parents = this.graph.children?.filter(item => item.id === parent);
+            if (parents?.length != 1) {
+                throw new ReferenceError();
+            }
+            parents[0].children?.push(child);
+        } else {
+            this.graph.children?.push(child);
+        }
     }
 
     addEdge(itemID: string, c4Description: string, c4Technology: string, source: string, target: string) {
@@ -56,7 +60,7 @@ export class PlacementEngine {
     }
 
     async getLayout() {
-      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered', 'hierarchyHandling': 'INCLUDE_CHILDREN'} });
+      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered'} });
       return rez;
     }
 }
