@@ -22,4 +22,18 @@ describe('Testing PlacementEngine', () => {
         expect(layout.children?.length).toBe(2);
         expect(layout.edges?.length).toBe(1);
     });
+
+    test('Add three nodes and a parent container',async () => {
+        var pe = new PlacementEngine();
+        pe.addNode('SoftwareSystem', 'ss001', 'Software System', '', 'Parent Software System', 240, 120);
+        pe.addNode('Container', 'node1', 'Node One', 'Node One Tech', 'Node One Desc', 240, 120, 'ss001');
+        pe.addNode('Container', 'node2', 'Node Two', 'Node Two Tech', 'Node Two Desc', 240, 120, 'ss001');
+        pe.addNode('Container', 'node3', 'Node Three', 'Node Three Tech', 'Node Three Desc', 240, 120, 'ss001');
+        pe.addEdge('edge1', 'Edge Desc', 'Edge Tech', 'node1', 'node2');
+        pe.addEdge('edge2', 'Edge Desc', 'Edge Tech', 'node1', 'node3');
+        var layout = await pe.getLayout();
+        console.log(JSON.stringify(layout));
+        expect(layout.children?.length).toBe(4);
+        expect(layout.edges?.length).toBe(2);
+    });
 })

@@ -22,8 +22,11 @@ export class PlacementEngine {
     }
 
     addNode(c4Type: string, itemID: string, c4Name: string, c4Technology: string, c4Description: string, width: number, height: number, parent?: string) {
-        const child = <ElkNode>{id: itemID, width: width, height: height, labels: [] };
-        // Need to store the c4 annotations. Label field? Lookup table by ID in MxBuilder?
+        // Find parent
+        if (parent) {
+            const parents = this.graph.children?.filter(item => item.id === parent);
+        }
+        const child = <ElkNode>{id: itemID, width: width, height: height, labels: [], children: [] };
         let typeLabel:c4label = { c4item: 'c4Type', payload: c4Type};
         let nameLabel:c4label = { c4item: 'c4Name', payload: c4Name };
         let techLabel:c4label = { c4item: 'c4Technology', payload: c4Technology};
@@ -53,7 +56,7 @@ export class PlacementEngine {
     }
 
     async getLayout() {
-      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered'} });
+      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered', 'hierarchyHandling': 'INCLUDE_CHILDREN'} });
       return rez;
     }
 }
