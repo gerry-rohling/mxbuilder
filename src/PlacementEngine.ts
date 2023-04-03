@@ -21,6 +21,10 @@ export class PlacementEngine {
         this.graph = <ElkNode>{id: 'root', children: [], edges: [], labels: []};
     }
 
+    reset() {
+        this.graph = <ElkNode>{id: 'root', children: [], edges: [], labels: []};
+    }
+
     addNode(c4Type: string, itemID: string, c4Name: string, c4Technology: string, c4Description: string, width: number, height: number, parent?: string) {
         const child = <ElkNode>{id: itemID, width: width, height: height, labels: [], children: [] };
         let typeLabel:c4label = { c4item: 'c4Type', payload: c4Type};
