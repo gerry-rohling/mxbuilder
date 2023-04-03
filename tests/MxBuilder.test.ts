@@ -2,12 +2,6 @@ import { XMLParser } from "fast-xml-parser";
 import { MxBuilder } from "../src/MxBuilder";
 
 describe('Testing MxBuilder', () => {
-    test('returns hello world', () => {
-        var mx = new MxBuilder();
-        var str = mx.toString();
-        expect(str).toBe("Hello world");
-    });
-
     test('Returns framework XML', () => {
         var mx = new MxBuilder();
         var str = mx.toDiagram();

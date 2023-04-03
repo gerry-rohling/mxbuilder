@@ -6,6 +6,19 @@ type point = {
     y: number
 };
 
+enum C4TYPE {
+    SoftwareSystem = 'SoftwareSystem',
+    ExternalSoftwareSystem = 'ExternalSoftwareSystem',
+    SystemScopeBoundary = 'SystemScopeBoundary',
+    Container = 'Container',
+    ContainerScopeBoundary = 'ContainerScopeBoundary',
+    Component = 'Component',
+    Person = 'Person',
+    ExternalPerson = 'ExternalPerson',
+    Relationship = 'Relationship',
+    Empty = ''
+};
+
 const RECTANGLE_WIDTH = 240;
 const RECTANGLE_HEIGHT = 120;
 
@@ -26,60 +39,58 @@ export class MxBuilder {
         this.rootNode.ele('mxCell', { id: '1', parent: '0' });
     }
 
-    toDiagram(): string {
+    async toDiagram(): Promise<string> {
+        await this.layoutDiagram();
         return this.doc.end({ prettyPrint: true });
-    }
-    toString(): string {
-        return "Hello world";
     }
 
     //#region Place Items
 
     placeSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('SoftwareSystem', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.SoftwareSystem, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placeExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('ExternalSoftwareSystem', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.ExternalSoftwareSystem, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placeSystemScopeBoundary(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('SystemScopeBoundary', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.SystemScopeBoundary, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placeContainer(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('Container', itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.Container, itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placeContainerScopeBoundary(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('ContainerScopeBoundary', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.ContainerScopeBoundary, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placeComponent(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('Component', itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.Component, itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placePerson(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('Person', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.Person, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
     placeExternalPerson(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode('ExternalPerson', itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.ExternalPerson, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
@@ -242,6 +253,74 @@ export class MxBuilder {
 
     getRelationshipStyle(): string {
         return 'endArrow=blockThin;html=1;fontSize=10;fontColor=#404040;strokeWidth=1;endFill=1;strokeColor=#828282;elbow=vertical;metaEdit=1;endSize=14;startSize=14;jumpStyle=arc;jumpSize=16;rounded=0;edgeStyle=orthogonalEdgeStyle;';
+    }
+
+    // Here we convert what is in the PlacementEngine into Draw.io entity placement in the mxGraph doc. Fun.
+    async layoutDiagram(): Promise<boolean> {
+        var layout = await this.engine.getLayout();
+        // Draw nodes - this will need to recurse as children can have children
+        layout.children?.forEach((node) => {
+            console.log(JSON.stringify(node));
+            let c4Type:C4TYPE = C4TYPE.Empty;
+            let c4Name = '';
+            let c4Technology = '';
+            let c4Description = '';
+            node.labels?.forEach((label) => {
+                if (label.text){
+                    let obj = JSON.parse(label.text);
+                    console.log(obj.c4item);
+                    switch (obj.c4item){
+                        case 'c4Type':
+                            c4Type = obj.payload;
+                            break;
+                        case 'c4Name':
+                            c4Name = obj.payload;
+                            break;
+                        case 'c4Technology':
+                            c4Technology = obj.payload;
+                            break;
+                        case 'c4Description':
+                            c4Description = obj.payload;
+                            break;
+                    }
+                }
+            });
+            console.log(`Type: ${c4Type}, Name: ${c4Name}, Tech: ${c4Technology}, Desc: ${c4Description}`);
+            switch (String(c4Type)) {
+                case C4TYPE.SoftwareSystem: 
+                this.drawSoftwareSystem(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.ExternalSoftwareSystem: 
+                this.drawExternalSoftwareSystem(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.SystemScopeBoundary: 
+                this.drawSystemScopeBoundary(c4Name, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.Container: 
+                this.drawContainer(c4Name, c4Technology, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.ContainerScopeBoundary: 
+                this.drawContainerScopeBoundary(c4Name, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.Component: 
+                this.drawComponent(c4Name, c4Technology, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.Person: 
+                this.drawPerson(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.ExternalPerson: 
+                this.drawExternalPerson(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                break;
+                case C4TYPE.Relationship: 
+                // Is this done elsewhere?
+                break;
+                case C4TYPE.Empty: 
+                // Can't help you here.
+                break;
+            }
+        });
+        // Draw relationships
+        return true;
     }
 }
 
