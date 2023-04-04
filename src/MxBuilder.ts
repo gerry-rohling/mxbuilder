@@ -1,5 +1,6 @@
 import { create } from "xmlbuilder2";
 import { PlacementEngine } from "./PlacementEngine";
+import { ElkNode } from "elkjs";
 
 type point = {
     x: number,
@@ -259,6 +260,13 @@ export class MxBuilder {
     async layoutDiagram(): Promise<boolean> {
         var layout = await this.engine.getLayout();
         // Draw nodes - this will need to recurse as children can have children
+        this.drawNodes(layout, 0, 0);
+        // Draw relationships
+        return true;
+    }
+
+    // Seems locations are relative to parent so need to pass in parent X and Y
+    drawNodes(layout: ElkNode, parent_x: number, parent_y: number) {
         layout.children?.forEach((node) => {
             console.log(JSON.stringify(node));
             let c4Type:C4TYPE = C4TYPE.Empty;
@@ -288,28 +296,28 @@ export class MxBuilder {
             console.log(`Type: ${c4Type}, Name: ${c4Name}, Tech: ${c4Technology}, Desc: ${c4Description}`);
             switch (String(c4Type)) {
                 case C4TYPE.SoftwareSystem: 
-                this.drawSoftwareSystem(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawSoftwareSystem(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.ExternalSoftwareSystem: 
-                this.drawExternalSoftwareSystem(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawExternalSoftwareSystem(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.SystemScopeBoundary: 
-                this.drawSystemScopeBoundary(c4Name, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawSystemScopeBoundary(c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Container: 
-                this.drawContainer(c4Name, c4Technology, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawContainer(c4Name, c4Technology, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.ContainerScopeBoundary: 
-                this.drawContainerScopeBoundary(c4Name, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawContainerScopeBoundary(c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Component: 
-                this.drawComponent(c4Name, c4Technology, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawComponent(c4Name, c4Technology, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Person: 
-                this.drawPerson(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawPerson(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.ExternalPerson: 
-                this.drawExternalPerson(c4Name, c4Description, node.x || 0, node.y || 0, node.width, node.height);
+                this.drawExternalPerson(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Relationship: 
                 // Is this done elsewhere?
@@ -318,9 +326,8 @@ export class MxBuilder {
                 // Can't help you here.
                 break;
             }
+            this.drawNodes(node, node.x || 0, node.y || 0);
         });
-        // Draw relationships
-        return true;
     }
 }
 

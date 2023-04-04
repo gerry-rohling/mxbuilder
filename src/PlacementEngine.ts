@@ -64,7 +64,7 @@ export class PlacementEngine {
     }
 
     async getLayout() {
-      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered'} });
+      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered', 'elk.padding': '[left=48, top=48, right=48, bottom=48]' } });
       return rez;
     }
 }
