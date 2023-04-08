@@ -328,10 +328,11 @@ export class MxBuilder {
         });
     }
 
-    // All Edges are listed at the root level but coordinates are based on parent coordinates of source and target nodes
+    // All Edges are listed at the root level but coordinates are based on parent coordinates of container
     drawEdges(layout: ElkNode) {
         layout.edges?.forEach((edge) => {
             console.log(JSON.stringify(edge));
+            let ctr = this.findElkNode(layout, edge.container);
             let c4Technology = '';
             let c4Description = '';
             edge.labels?.forEach((label) => {
@@ -355,6 +356,24 @@ export class MxBuilder {
                 this.drawRelationship(c4Description, c4Technology, source, target, section.startPoint, section.endPoint, section.bendPoints);
             });
         });
+    }
+
+    findElkNode(node: ElkNode, id: string | undefined):ElkNode | undefined {
+        let rez = undefined;
+        if (id) {
+            node.children?.forEach((child) => {
+                if (child.id == id) {
+                    rez = child;
+                    return;
+                };
+                var f = this.findElkNode(child, id);
+                if (f) {
+                    rez = f;
+                    return;
+                }
+            });
+        }
+        return rez;
     }
 }
 
