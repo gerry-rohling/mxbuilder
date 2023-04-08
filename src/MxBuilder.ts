@@ -47,49 +47,49 @@ export class MxBuilder {
 
     //#region Place Items
 
-    placeSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeSoftwareSystem(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.SoftwareSystem, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeExternalSoftwareSystem(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.ExternalSoftwareSystem, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeSystemScopeBoundary(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeSystemScopeBoundary(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.SystemScopeBoundary, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeContainer(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeContainer(c4Name: string, c4Technology: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.Container, itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeContainerScopeBoundary(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeContainerScopeBoundary(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.ContainerScopeBoundary, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeComponent(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeComponent(c4Name: string, c4Technology: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.Component, itemID, c4Name, c4Technology, c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placePerson(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placePerson(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.Person, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
     }
 
-    placeExternalPerson(c4Name: string, c4Description: string, x: number, y: number, id?: string, parent?: string): string {
+    placeExternalPerson(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
         this.engine.addNode(C4TYPE.ExternalPerson, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
         return itemID;
@@ -267,8 +267,9 @@ export class MxBuilder {
 
     // Seems locations are relative to parent so need to pass in parent X and Y
     drawNodes(layout: ElkNode, parent_x: number, parent_y: number) {
+        // console.log(JSON.stringify(layout));
         layout.children?.forEach((node) => {
-            console.log(JSON.stringify(node));
+            //console.log(JSON.stringify(node));
             let c4Type:C4TYPE = C4TYPE.Empty;
             let c4Name = '';
             let c4Technology = '';
@@ -276,7 +277,7 @@ export class MxBuilder {
             node.labels?.forEach((label) => {
                 if (label.text){
                     let obj = JSON.parse(label.text);
-                    console.log(obj.c4item);
+                    //console.log(obj.c4item);
                     switch (obj.c4item){
                         case 'c4Type':
                             c4Type = obj.payload;
@@ -290,10 +291,10 @@ export class MxBuilder {
                         case 'c4Description':
                             c4Description = obj.payload;
                             break;
-                    }
-                }
+                    };
+                };
             });
-            console.log(`Type: ${c4Type}, Name: ${c4Name}, Tech: ${c4Technology}, Desc: ${c4Description}`);
+            //console.log(`Type: ${c4Type}, Name: ${c4Name}, Tech: ${c4Technology}, Desc: ${c4Description}`);
             switch (String(c4Type)) {
                 case C4TYPE.SoftwareSystem: 
                 this.drawSoftwareSystem(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
@@ -327,6 +328,25 @@ export class MxBuilder {
                 break;
             }
             this.drawNodes(node, node.x || 0, node.y || 0);
+        });
+        layout.edges?.forEach((edge) => {
+            console.log(JSON.stringify(edge));
+            let c4Technology = '';
+            let c4Description = '';
+            edge.labels?.forEach((label) => {
+                if (label.text){
+                    let obj = JSON.parse(label.text);
+                    switch (obj.c4item){
+                        case 'c4Technology':
+                            c4Technology = obj.payload;
+                            break;
+                        case 'c4Description':
+                            c4Description = obj.payload;
+                            break;
+                    }
+                };
+            });
+            console.log(`Tech: ${c4Technology}, Desc: ${c4Description}`);
         });
     }
 }
