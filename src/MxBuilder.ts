@@ -1,11 +1,8 @@
 import { create } from "xmlbuilder2";
 import { PlacementEngine } from "./PlacementEngine";
-import { ElkNode } from "elkjs";
+import { ElkNode, ElkPoint } from "elkjs";
 
-type point = {
-    x: number,
-    y: number
-};
+
 
 enum C4TYPE {
     SoftwareSystem = 'SoftwareSystem',
@@ -169,7 +166,7 @@ export class MxBuilder {
         return id;
     }
 
-    drawRelationship(c4Description: string, c4Technology: string, source: string, target: string, start: point, end: point): string {
+    drawRelationship(c4Description: string, c4Technology: string, source: string, target: string, start: ElkPoint, end: ElkPoint, wayPoints?: ElkPoint[]): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
         const cell = obj.ele('mxCell', {style: this.getRelationshipStyle(), parent: '1', source: source, target: target, edge: '1'});
@@ -262,12 +259,12 @@ export class MxBuilder {
         // Draw nodes - this will need to recurse as children can have children
         this.drawNodes(layout, 0, 0);
         // Draw relationships
+        this.drawEdges(layout);
         return true;
     }
 
     // Seems locations are relative to parent so need to pass in parent X and Y
     drawNodes(layout: ElkNode, parent_x: number, parent_y: number) {
-        // console.log(JSON.stringify(layout));
         layout.children?.forEach((node) => {
             //console.log(JSON.stringify(node));
             let c4Type:C4TYPE = C4TYPE.Empty;
@@ -329,6 +326,10 @@ export class MxBuilder {
             }
             this.drawNodes(node, node.x || 0, node.y || 0);
         });
+    }
+
+    // All Edges are listed at the root level but coordinates are based on parent coordinates of source and target nodes
+    drawEdges(layout: ElkNode) {
         layout.edges?.forEach((edge) => {
             console.log(JSON.stringify(edge));
             let c4Technology = '';
@@ -347,6 +348,12 @@ export class MxBuilder {
                 };
             });
             console.log(`Tech: ${c4Technology}, Desc: ${c4Description}`);
+            edge.sections?.forEach((section) => {
+                console.log(JSON.stringify(section));
+                var source = section.outgoingShape || '';
+                var target = section.incomingShape || '';
+                this.drawRelationship(c4Description, c4Technology, source, target, section.startPoint, section.endPoint, section.bendPoints);
+            });
         });
     }
 }
