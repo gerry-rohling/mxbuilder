@@ -1,8 +1,7 @@
 import { create } from "xmlbuilder2";
 import { PlacementEngine } from "./PlacementEngine";
 import { ElkNode, ElkPoint } from "elkjs";
-
-
+import { select } from "xpath";
 
 enum C4TYPE {
     SoftwareSystem = 'SoftwareSystem',
@@ -169,12 +168,23 @@ export class MxBuilder {
     drawRelationship(c4Description: string, c4Technology: string, source: string, target: string, start: ElkPoint, end: ElkPoint, wayPoints?: ElkPoint[]): string {
         const id = getID(22);
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
+        // Try and locate the source and target nodes in the doc
+        let tmpDoc = this.doc.doc();
+        let src = select('/*/object[@id = "ss001"]', tmpDoc.node as any) as any;
         const cell = obj.ele('mxCell', {style: this.getRelationshipStyle(), parent: '1', source: source, target: target, edge: '1'});
         var cellWidth = Math.abs(start.x - end.x);
         var cellHeight = Math.abs(start.y - end.y);
         const geo = cell.ele('mxGeometry', { width: cellWidth, height: cellHeight, relative: '1', as: 'geometry'});
         geo.ele('mxPoint', { x:start.x, y:start.y, as: 'sourcePoint'});
         geo.ele('mxPoint', { x:end.x  , y:end.y,   as: 'targetPoint'});
+        console.log('WAYPOINTS');
+        console.log(JSON.stringify(wayPoints));
+        if (wayPoints && wayPoints?.length > 0){
+            const arr = geo.ele('Array', {as: 'points'});
+            wayPoints?.forEach((pt) => {
+                arr.ele('mxPoint', {x: pt.x, y: pt.y});
+            });
+        }
         return id;
 
     }
@@ -250,7 +260,7 @@ export class MxBuilder {
     }
 
     getRelationshipStyle(): string {
-        return 'endArrow=blockThin;html=1;fontSize=10;fontColor=#404040;strokeWidth=1;endFill=1;strokeColor=#828282;elbow=vertical;metaEdit=1;endSize=14;startSize=14;jumpStyle=arc;jumpSize=16;rounded=0;edgeStyle=orthogonalEdgeStyle;';
+        return 'endArrow=blockThin;html=1;fontSize=10;fontColor=#404040;strokeWidth=1;endFill=1;strokeColor=#828282;elbow=vertical;metaEdit=1;endSize=14;startSize=14;jumpStyle=arc;jumpSize=16;rounded=0;';
     }
 
     // Here we convert what is in the PlacementEngine into Draw.io entity placement in the mxGraph doc. Fun.
@@ -333,6 +343,8 @@ export class MxBuilder {
         layout.edges?.forEach((edge) => {
             console.log(JSON.stringify(edge));
             let ctr = this.findElkNode(layout, edge.container);
+            let parent_x = ctr?.x || 0;
+            let parent_y = ctr?.y || 0;
             let c4Technology = '';
             let c4Description = '';
             edge.labels?.forEach((label) => {
@@ -353,7 +365,14 @@ export class MxBuilder {
                 console.log(JSON.stringify(section));
                 var source = section.outgoingShape || '';
                 var target = section.incomingShape || '';
-                this.drawRelationship(c4Description, c4Technology, source, target, section.startPoint, section.endPoint, section.bendPoints);
+                let offsetStartPoint: ElkPoint = {x: section.startPoint.x + parent_x, y: section.startPoint.y + parent_y};
+                let offsetEndPoint: ElkPoint = {x: section.endPoint.x + parent_x, y: section.endPoint.y + parent_y};
+                let offsetBendPoints: ElkPoint[] = new Array();
+                section.bendPoints?.forEach((bend) => {
+                    let offsetBend: ElkPoint = {x: bend.x + parent_x, y: bend.y + parent_y};
+                    offsetBendPoints.push(offsetBend);
+                });
+                this.drawRelationship(c4Description, c4Technology, source, target, offsetStartPoint, offsetEndPoint, offsetBendPoints);
             });
         });
     }
