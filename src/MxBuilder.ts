@@ -354,8 +354,10 @@ export class MxBuilder {
             console.log(`Tech: ${c4Technology}, Desc: ${c4Description}`);
             edge.sections?.forEach((section) => {
                 console.log(JSON.stringify(section));
-                var source = section.outgoingShape || '';
-                var target = section.incomingShape || '';
+                //var source = section.outgoingShape || '';
+                var source = edge.sources[0] || '';
+                //var target = section.incomingShape || '';
+                var target = edge.targets[0] || '';
                 let offsetStartPoint: ElkPoint = {x: section.startPoint.x + parent_x, y: section.startPoint.y + parent_y};
                 let offsetEndPoint: ElkPoint = {x: section.endPoint.x + parent_x, y: section.endPoint.y + parent_y};
                 let offsetBendPoints: ElkPoint[] = new Array();

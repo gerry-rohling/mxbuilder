@@ -22,7 +22,7 @@ describe('Testing Full Stack', () => {
 
     test('Render Connected Containers within SoftwareSystem Scope',async () => {
         var mx = new MxBuilder();
-        var id = mx.placeSystemScopeBoundary('System Name', 'System Description', 'ss001');
+        var id1 = mx.placeSystemScopeBoundary('System Name', 'System Description', 'ss001');
         var id2 = mx.placeContainer('Container 1', 'Tech 1', 'Container 1 Desc', 'c100', 'ss001');
         var id3 = mx.placeContainer('Container 2', 'Tech 2', 'Container 2 Desc', 'c200', 'ss001');
         var id4 = mx.placeContainer('Container 3', 'Tech 3', 'Container 3 Desc', 'c300', 'ss001');
@@ -30,7 +30,7 @@ describe('Testing Full Stack', () => {
         var c2  = mx.placeRelationship('Rel 2 Desc', 'Rel 2 Tech', id2, id4);
         var str = await mx.toDiagram();
         console.log(str);
-        expect(id).toBe('ss001');
+        expect(id1).toBe('ss001');
         expect(id2).toBe('c100');
         expect(id3).toBe('c200');
         expect(c1.length).toBe(22);
