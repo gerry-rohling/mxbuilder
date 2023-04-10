@@ -101,76 +101,67 @@ export class MxBuilder {
 
     //#region Draw Items
 
-    drawSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
-        const id = getID(22);
+    drawSoftwareSystem(id: string, c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const obj = this.rootNode.ele('object', { placeholders: '1', c4Type: 'Software System', c4Name: c4Name, c4Description: c4Description, label: this.getSoftwareSystemLabel(), id: id });
         const cell = obj.ele('mxCell', { style: this.getSoftwareSystemStyle(), vertex: '1', parent: '1'});
         cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    drawExternalSoftwareSystem(c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
-        const id = getID(22);
+    drawExternalSoftwareSystem(id:string, c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const obj = this.rootNode.ele('object', { placeholders: '1', c4Type: 'Software System', c4Name: c4Name, c4Description: c4Description, label: this.getExternalSoftwareSystemLabel(), id: id });
         const cell = obj.ele('mxCell', { style: this.getExternalSoftwareSystemStyle(), vertex: '1', parent: '1'});
         cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    drawSystemScopeBoundary(c4Name: string, x: number, y: number, width: number = 720, height: number = 210): string {
-        const id = getID(22);
+    drawSystemScopeBoundary(id:string, c4Name: string, x: number, y: number, width: number = 720, height: number = 210): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'SystemScopeBoundary', c4Name: c4Name, c4Application: 'Software System', label: this.getSystemScopeBoundaryLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getSystemScopeBoundaryStyle(), parent: '1', vertex: '1' });
         cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    drawContainer(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120) : string {
-        const id = getID(22);
+    drawContainer(id:string, c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120) : string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'Container', c4Technology: c4Technology, c4Description: c4Description, label: this.getContainerLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getContainerStyle(), parent: '1', vertex: '1'});
         cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    drawContainerScopeBoundary(c4Name: string, x: number, y: number, width: number = 360, height: number = 210): string {
-        const id = getID(22);
+    drawContainerScopeBoundary(id:string, c4Name: string, x: number, y: number, width: number = 360, height: number = 210): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'ContainerScopeBoundary', c4Application: 'Container', label: this.getContainerScopeBoundaryLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getContainerScopeBoundaryStyle(), parent: '1', vertex: '1'});
         cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
         return id;
     }
 
-    drawComponent(c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
-        const id = getID(22);
+    drawComponent(id:string, c4Name: string, c4Technology: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name: c4Name, c4Type: 'Component', c4Technology: c4Technology, c4Description: c4Description, label: this.getComponentLabel(), id: id});
         const cell = obj.ele('mxCell', { style: this.getComponentStyle(), parent: '1', vertex: '1'});
         cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as: 'geometry'});
         return id;
     }
 
-    drawPerson(c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
-        const id = getID(22);
+    drawPerson(id:string, c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, label:this.getPersonLabel(), id:id});
         const cell = obj.ele('mxCell', {style:this.getPersonStyle(), parent:'1', vertex:'1'});
         cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as:'geometry'});
         return id;
     }
 
-    drawExternalPerson(c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
-        const id = getID(22);
+    drawExternalPerson(id:string, c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, label:this.getExternalPersonLabel(), id:id});
         const cell = obj.ele('mxCell', {style:this.getExternalPersonStyle(), parent:'1', vertex:'1'});
         cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as:'geometry'});
         return id;
     }
 
-    drawRelationship(c4Description: string, c4Technology: string, source: string, target: string, start: ElkPoint, end: ElkPoint, wayPoints?: ElkPoint[]): string {
-        const id = getID(22);
+    drawRelationship(id:string, c4Description: string, c4Technology: string, source: string, target: string, start: ElkPoint, end: ElkPoint, wayPoints?: ElkPoint[]): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
         // Try and locate the source and target nodes in the doc
         let tmpDoc = this.doc.doc();
-        let src = select('/*/object[@id = "ss001"]', tmpDoc.node as any) as any;
+        let src = select('//object[@id = "ss001"]', tmpDoc.node as any) as any;
         const cell = obj.ele('mxCell', {style: this.getRelationshipStyle(), parent: '1', source: source, target: target, edge: '1'});
         var cellWidth = Math.abs(start.x - end.x);
         var cellHeight = Math.abs(start.y - end.y);
@@ -304,28 +295,28 @@ export class MxBuilder {
             //console.log(`Type: ${c4Type}, Name: ${c4Name}, Tech: ${c4Technology}, Desc: ${c4Description}`);
             switch (String(c4Type)) {
                 case C4TYPE.SoftwareSystem: 
-                this.drawSoftwareSystem(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawSoftwareSystem(node.id, c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.ExternalSoftwareSystem: 
-                this.drawExternalSoftwareSystem(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawExternalSoftwareSystem(node.id, c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.SystemScopeBoundary: 
-                this.drawSystemScopeBoundary(c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawSystemScopeBoundary(node.id, c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Container: 
-                this.drawContainer(c4Name, c4Technology, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawContainer(node.id, c4Name, c4Technology, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.ContainerScopeBoundary: 
-                this.drawContainerScopeBoundary(c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawContainerScopeBoundary(node.id, c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Component: 
-                this.drawComponent(c4Name, c4Technology, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawComponent(node.id, c4Name, c4Technology, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Person: 
-                this.drawPerson(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawPerson(node.id, c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.ExternalPerson: 
-                this.drawExternalPerson(c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                this.drawExternalPerson(node.id, c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
                 case C4TYPE.Relationship: 
                 // Is this done elsewhere?
@@ -372,7 +363,7 @@ export class MxBuilder {
                     let offsetBend: ElkPoint = {x: bend.x + parent_x, y: bend.y + parent_y};
                     offsetBendPoints.push(offsetBend);
                 });
-                this.drawRelationship(c4Description, c4Technology, source, target, offsetStartPoint, offsetEndPoint, offsetBendPoints);
+                this.drawRelationship(edge.id, c4Description, c4Technology, source, target, offsetStartPoint, offsetEndPoint, offsetBendPoints);
             });
         });
     }
