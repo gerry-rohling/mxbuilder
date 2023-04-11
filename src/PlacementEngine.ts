@@ -64,7 +64,8 @@ export class PlacementEngine {
     }
 
     async getLayout() {
-      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered', 'elk.padding': '[left=48, top=48, right=48, bottom=48]', 'elk.spacing.nodeNode': '96', 'elk.spacing.componentComponent': '96' } });
+        console.log(JSON.stringify(this.graph));
+      const rez = await this.elk.layout(this.graph, { layoutOptions: {'algorithm': 'layered', 'elk.padding': '[left=48, top=48, right=48, bottom=48]', 'elk.spacing.nodeNode': '96' } });
       return rez;
     }
 }

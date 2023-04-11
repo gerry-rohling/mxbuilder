@@ -157,24 +157,32 @@ export class MxBuilder {
         return id;
     }
 
-    drawRelationship(id:string, c4Description: string, c4Technology: string, source: string, target: string, start: ElkPoint, end: ElkPoint, wayPoints?: ElkPoint[]): string {
+    drawRelationship(id:string, c4Description: string, c4Technology: string, source: string, target: string, start?: ElkPoint, end?: ElkPoint, wayPoints?: ElkPoint[]): string {
         const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'Relationship', c4Technology: c4Technology, c4Description: c4Description, label: this.getRelationshipLabel(), id: id});
         // Try and locate the source and target nodes in the doc
         let tmpDoc = this.doc.doc();
-        let src = select('//object[@id = "ss001"]', tmpDoc.node as any) as any;
+        let src = select(`//object[@id = "${source}"]`, tmpDoc.node as any) as any;
+        let tgt = select(`//object[@id = "${target}"]`, tmpDoc.node as any) as any;
         const cell = obj.ele('mxCell', {style: this.getRelationshipStyle(), parent: '1', source: source, target: target, edge: '1'});
-        var cellWidth = Math.abs(start.x - end.x);
-        var cellHeight = Math.abs(start.y - end.y);
+        if (start && end) {
+            var cellWidth = Math.abs(start.x - end.x);
+            var cellHeight = Math.abs(start.y - end.y);
+        } else {
+            var cellWidth = 0;
+            var cellHeight = 0;
+        }
         const geo = cell.ele('mxGeometry', { width: cellWidth, height: cellHeight, relative: '1', as: 'geometry'});
-        geo.ele('mxPoint', { x:start.x, y:start.y, as: 'sourcePoint'});
-        geo.ele('mxPoint', { x:end.x  , y:end.y,   as: 'targetPoint'});
-        console.log('WAYPOINTS');
-        console.log(JSON.stringify(wayPoints));
-        if (wayPoints && wayPoints?.length > 0){
-            const arr = geo.ele('Array', {as: 'points'});
-            wayPoints?.forEach((pt) => {
-                arr.ele('mxPoint', {x: pt.x, y: pt.y});
-            });
+        if (start && end) {
+            geo.ele('mxPoint', { x:start.x, y:start.y, as: 'sourcePoint'});
+            geo.ele('mxPoint', { x:end.x  , y:end.y,   as: 'targetPoint'});
+            console.log('WAYPOINTS');
+            console.log(JSON.stringify(wayPoints));
+            if (wayPoints && wayPoints?.length > 0){
+                const arr = geo.ele('Array', {as: 'points'});
+                wayPoints?.forEach((pt) => {
+                    arr.ele('mxPoint', {x: pt.x, y: pt.y});
+                });
+            }
         }
         return id;
 
@@ -257,6 +265,7 @@ export class MxBuilder {
     // Here we convert what is in the PlacementEngine into Draw.io entity placement in the mxGraph doc. Fun.
     async layoutDiagram(): Promise<boolean> {
         var layout = await this.engine.getLayout();
+        console.log(JSON.stringify(layout));
         // Draw nodes - this will need to recurse as children can have children
         this.drawNodes(layout, 0, 0);
         // Draw relationships
@@ -351,22 +360,24 @@ export class MxBuilder {
                     }
                 };
             });
+            var source = edge.sources[0] || '';
+            var target = edge.targets[0] || '';
             console.log(`Tech: ${c4Technology}, Desc: ${c4Description}`);
-            edge.sections?.forEach((section) => {
-                console.log(JSON.stringify(section));
-                //var source = section.outgoingShape || '';
-                var source = edge.sources[0] || '';
-                //var target = section.incomingShape || '';
-                var target = edge.targets[0] || '';
-                let offsetStartPoint: ElkPoint = {x: section.startPoint.x + parent_x, y: section.startPoint.y + parent_y};
-                let offsetEndPoint: ElkPoint = {x: section.endPoint.x + parent_x, y: section.endPoint.y + parent_y};
-                let offsetBendPoints: ElkPoint[] = new Array();
-                section.bendPoints?.forEach((bend) => {
-                    let offsetBend: ElkPoint = {x: bend.x + parent_x, y: bend.y + parent_y};
-                    offsetBendPoints.push(offsetBend);
+            if (edge.sections){
+                edge.sections?.forEach((section) => {
+                    console.log(JSON.stringify(section));
+                    let offsetStartPoint: ElkPoint = {x: section.startPoint.x + parent_x, y: section.startPoint.y + parent_y};
+                    let offsetEndPoint: ElkPoint = {x: section.endPoint.x + parent_x, y: section.endPoint.y + parent_y};
+                    let offsetBendPoints: ElkPoint[] = new Array();
+                    section.bendPoints?.forEach((bend) => {
+                        let offsetBend: ElkPoint = {x: bend.x + parent_x, y: bend.y + parent_y};
+                        offsetBendPoints.push(offsetBend);
+                    });
+                    this.drawRelationship(edge.id, c4Description, c4Technology, source, target, offsetStartPoint, offsetEndPoint, offsetBendPoints);
                 });
-                this.drawRelationship(edge.id, c4Description, c4Technology, source, target, offsetStartPoint, offsetEndPoint, offsetBendPoints);
-            });
+            } else {
+                this.drawRelationship(edge.id, c4Description, c4Technology, source, target);
+            }
         });
     }
 
