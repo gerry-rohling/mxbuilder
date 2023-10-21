@@ -13,13 +13,13 @@ This library was built to allow for the easy generation of diagrams.net MX based
 Install with npm:
 
 ```bash
-npm install --save-dev mxbuilder
+npm install --save-prod mxbuilder
 ```
 
 Install with yarn:
 
 ```bash
-yarn add mxbuilder --dev
+yarn add mxbuilder
 ```
 
 ## Usage
