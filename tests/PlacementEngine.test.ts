@@ -1,3 +1,4 @@
+import * as fsPromise from 'fs/promises';
 import { PlacementEngine } from "../src/PlacementEngine";
 
 describe('Testing PlacementEngine', () => {
@@ -18,7 +19,8 @@ describe('Testing PlacementEngine', () => {
         pe.addNode('Container', 'node2', 'Node Two', 'Node Two Tech', 'Node Two Desc', 240, 120);
         pe.addEdge('edge1', 'Edge Desc', 'Edge Tech', 'node1', 'node2');
         var layout = await pe.getLayout();
-        console.log(JSON.stringify(layout));
+        // console.log(JSON.stringify(layout));
+        await fsPromise.writeFile("./tests/outputs/placement-two-nodes.json", JSON.stringify(layout));
         expect(layout.children?.length).toBe(2);
         expect(layout.edges?.length).toBe(1);
     });
@@ -32,7 +34,8 @@ describe('Testing PlacementEngine', () => {
         pe.addEdge('edge1', 'Edge Desc', 'Edge Tech', 'node1', 'node2');
         pe.addEdge('edge2', 'Edge Desc', 'Edge Tech', 'node1', 'node3');
         var layout = await pe.getLayout();
-        console.log(JSON.stringify(layout));
+        // console.log(JSON.stringify(layout));
+        await fsPromise.writeFile("./tests/outputs/placement-three-nodes-and-parent.json", JSON.stringify(layout));
         expect(layout.children?.length).toBe(1);
         expect(layout.children?.[0].children?.length).toBe(3);
         expect(layout.edges?.length).toBe(2);

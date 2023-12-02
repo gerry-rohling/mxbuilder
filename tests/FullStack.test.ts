@@ -1,3 +1,4 @@
+import * as fsPromise from 'fs/promises';
 import { create } from "xmlbuilder2";
 import { MxBuilder } from "../src/MxBuilder";
 import { select } from "xpath";
@@ -34,6 +35,7 @@ describe('Testing Full Stack', () => {
         var c1  = mx.placeRelationship('Rel 1 Desc', 'Rel 1 Tech', id2, id3);
         var c2  = mx.placeRelationship('Rel 2 Desc', 'Rel 2 Tech', id2, id4);
         var str = await mx.toDiagram();
+        await fsPromise.writeFile("./tests/outputs/full-stack-connected-containers-in-softwaresystem.xml", str);
         var doc = create(str);
         let src = select('//object[@id = "ss001"]', doc.node as any) as any;
         let join = select(`//object[@id = "${c1}"]`, doc.node as any) as any;
@@ -57,7 +59,8 @@ describe('Testing Full Stack', () => {
         var c2  = mx.placeRelationship('Rel 2 Desc', 'Rel 2 Tech', 'ss003', 'c100');
         var c3  = mx.placeRelationship('Rel 3 Desc', 'Rel 3 Tech', 'ss004', 'c100');
         var str = await mx.toDiagram();
-        console.log(str);
+        // console.log(str);
+        await fsPromise.writeFile("./tests/outputs/full-stack-container-with-external-softwaresystem.xml", str);
         expect(id1).toBe('ss001');
     });
 });
