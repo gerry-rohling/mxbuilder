@@ -325,6 +325,9 @@ export class MxBuilder {
             });
             //console.log(`Type: ${c4Type}, Name: ${c4Name}, Tech: ${c4Technology}, Desc: ${c4Description}`);
             switch (String(c4Type)) {
+                case C4TYPE.GroupBoundary:
+                this.drawGroupBoundary(node.id, c4Name, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
+                break;
                 case C4TYPE.SoftwareSystem: 
                 this.drawSoftwareSystem(node.id, c4Name, c4Description, (node.x || 0) + parent_x, (node.y || 0) + parent_y, node.width, node.height);
                 break;
