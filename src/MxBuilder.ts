@@ -4,6 +4,7 @@ import { ElkNode, ElkPoint } from "elkjs";
 import { select } from "xpath";
 
 enum C4TYPE {
+    GroupBoundary = 'GroupBoundary',
     SoftwareSystem = 'SoftwareSystem',
     ExternalSoftwareSystem = 'ExternalSoftwareSystem',
     SystemScopeBoundary = 'SystemScopeBoundary',
@@ -42,6 +43,12 @@ export class MxBuilder {
     }
 
     //#region Place Items
+
+    placeGroupBoundary(c4Name: string, c4Description: string, id?: string): string {
+        let itemID = id ?? getID(22);
+        this.engine.addNode(C4TYPE.GroupBoundary, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
+        return itemID;
+    }
 
     placeSoftwareSystem(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
@@ -100,6 +107,13 @@ export class MxBuilder {
     //#endregion
 
     //#region Draw Items
+
+    drawGroupBoundary(id:string, c4Name: string, x: number, y: number, width: number = 720, height: number = 210): string {
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Type: 'GroupBoundary', c4Name: c4Name, c4Application: 'Group', label: this.getGroupBoundaryLabel(), id: id});
+        const cell = obj.ele('mxCell', { style: this.getGroupBoundaryStyle(), parent: '1', vertex: '1' });
+        cell.ele('mxGeometry', {x: x, y: y, width: width, height: height, as: 'geometry'});
+        return id;
+    }
 
     drawSoftwareSystem(id: string, c4Name: string, c4Description: string, x: number, y: number, width: number = 240, height: number = 120): string {
         const obj = this.rootNode.ele('object', { placeholders: '1', c4Type: 'Software System', c4Name: c4Name, c4Description: c4Description, label: this.getSoftwareSystemLabel(), id: id });
@@ -189,6 +203,14 @@ export class MxBuilder {
     }
 
     //#endregion
+
+    getGroupBoundaryLabel(): string {
+        return '<font style="font-size: 16px"><b><div style="text-align: left">%c4Name%</div></b></font><div style="text-align: left">[%c4Application%]</div>';
+    }
+
+    getGroupBoundaryStyle(): string {
+        return 'rounded=1;fontSize=11;whiteSpace=wrap;html=1;dashed=1;arcSize=20;fillColor=none;strokeColor=#666666;fontColor=#333333;labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;dashPattern=8 4;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;noLabel=0;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];';        
+    }
 
     getSoftwareSystemLabel(): string {
         return '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%]</div><br><div><font style="font-size: 11px"><font color="#cccccc">%c4Description%</font></div>';
