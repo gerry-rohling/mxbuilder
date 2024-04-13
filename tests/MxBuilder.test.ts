@@ -8,6 +8,14 @@ describe('Testing MxBuilder', () => {
         expect(str.indexOf('<?xml version="1.0" encoding="UTF-8"?>')).toBe(0);
     });
 
+    test('Draw Group Boundary Object', async () => {
+        var mx = new MxBuilder();
+        var id = mx.drawGroupBoundary('testid', 'Group Name', 300, 600);
+        var str = await mx.toDiagram();
+        console.log(str);
+        expect(id).toBe('testid');
+    })
+
     test('Draw Software System Object', async () => {
         var mx = new MxBuilder();
         var id = mx.drawSoftwareSystem('testid', 'System Name', 'System Description', 100, 200);

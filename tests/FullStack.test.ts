@@ -59,8 +59,17 @@ describe('Testing Full Stack', () => {
         var c2  = mx.placeRelationship('Rel 2 Desc', 'Rel 2 Tech', 'ss003', 'c100');
         var c3  = mx.placeRelationship('Rel 3 Desc', 'Rel 3 Tech', 'ss004', 'c100');
         var str = await mx.toDiagram();
-        // console.log(str);
         await fsPromise.writeFile("./tests/outputs/full-stack-container-with-external-softwaresystem.xml", str);
         expect(id1).toBe('ss001');
+    });
+
+    test('Place Software Systems in a Group', async() => {
+        var mx = new MxBuilder();
+        var id1 = mx.placeGroupBoundary('Group Name', 'Group Description', 'grp001');
+        var id3 = mx.placeSoftwareSystem('System 1', 'System 1 Desc', 'ss001', 'grp001');
+        var id4 = mx.placeSoftwareSystem('System 2', 'System 2 Desc', 'ss002', 'grp001');
+        var str = await mx.toDiagram();
+        await fsPromise.writeFile("./tests/outputs/full-stack-group-with-softwaresystems.xml", str);
+        expect(id1).toBe('grp001');
     });
 });
