@@ -1,5 +1,5 @@
-import { ElkLabel } from 'elkjs';
-import ELK, { ElkExtendedEdge, ElkNode } from 'elkjs/lib/elk-api';
+import ELK, { ElkExtendedEdge, ElkLabel, ElkNode } from 'elkjs/lib/elk.bundled.js'
+
 
 interface c4label {
     c4item: string;
@@ -8,12 +8,14 @@ interface c4label {
 
 export class PlacementEngine {
 
-    private elk = new ELK({
-        workerFactory: function(url) { // the value of 'url' is irrelevant here
-            const { Worker } = require('elkjs/lib/elk-worker.js') // non-minified
-            return new Worker(url)
-        }
-    });
+    // private elk = new ELK({
+    //     workerFactory: function(url) { // the value of 'url' is irrelevant here
+    //         const { Worker } = require('elkjs/lib/elk-worker.js') // non-minified
+    //         return new Worker(url)
+    //     }
+    // });
+
+    private elk = new ELK();
 
     private graph: ElkNode;
 

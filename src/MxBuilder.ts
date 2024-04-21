@@ -365,9 +365,11 @@ export class MxBuilder {
 
     // All Edges are listed at the root level but coordinates are based on parent coordinates of container
     drawEdges(layout: ElkNode) {
+        console.log('DrawEdges being called');
         layout.edges?.forEach((edge) => {
             console.log(JSON.stringify(edge));
-            let ctr = this.findElkNode(layout, edge.container);
+            // let ctr = this.findElkNode(layout, edge.container);
+            let ctr = this.findElkNode(layout, edge.id);
             let parent_x = ctr?.x || 0;
             let parent_y = ctr?.y || 0;
             let c4Technology = '';
