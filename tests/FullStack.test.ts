@@ -14,6 +14,35 @@ describe('Testing Full Stack', () => {
         expect(src.length).toBeGreaterThan(0);
     });
 
+    test('Link Internal and External Person to a Software System', async () => {
+        var mx = new MxBuilder();
+        var pid1 = mx.placePerson('Internal Person', 'An internal person', 'p001');
+        var pid2 = mx.placeExternalPerson('External Person', 'An external person', 'p002');
+        var id = mx.placeSoftwareSystem('System Name', 'System Description', 'ss001');
+        var c1 = mx.placeRelationship('Rel 1 Desc', 'Tech', pid1, id);
+        var c2 = mx.placeRelationship('Rel 2 Desc', 'Tech', pid2, id);
+        var str = await mx.toDiagram();
+        await fsPromise.writeFile("./tests/outputs/full-stack-two-people-softwaresystem.xml", str);
+        var doc = create(str);
+        let src = select('//object[@id = "ss001"]', doc.node as any) as any;
+        expect(id).toBe('ss001');
+        expect(src.length).toBeGreaterThan(0);
+    });
+
+    test('Two Software Systems with a Single Relationship', async() => {
+        var mx = new MxBuilder();
+        var id1 = mx.placeSoftwareSystem('System Name', 'System Description', 'ss001');
+        var id2 = mx.placeSoftwareSystem('System Two', 'System 2 Description', 'ss002');
+        var c1  = mx.placeRelationship('Rel 1 Desc', '', id1, id2);
+        var str = await mx.toDiagram();
+        await fsPromise.writeFile("./tests/outputs/full-stack-two-related-softwaresystems.xml", str);
+        var doc = create(str);
+        let src = select('//object[@id = "ss001"]', doc.node as any) as any;
+        expect(id1).toBe('ss001');
+        expect(id2).toBe('ss002');
+        expect(src.length).toBeGreaterThan(0);
+    });
+
     test('Render Container within SoftwareSystem Scope', async () => {
         var mx = new MxBuilder();
         var id = mx.placeSystemScopeBoundary('System Name', 'System Description', 'ss001');

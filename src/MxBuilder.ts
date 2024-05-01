@@ -19,6 +19,8 @@ enum C4TYPE {
 
 const RECTANGLE_WIDTH = 240;
 const RECTANGLE_HEIGHT = 120;
+const PERSON_WIDTH = 200;
+const PERSON_HEIGHT = 180;
 
 export class MxBuilder {
     private doc: any;
@@ -88,13 +90,13 @@ export class MxBuilder {
 
     placePerson(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode(C4TYPE.Person, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.Person, itemID, c4Name, '', c4Description, PERSON_WIDTH, PERSON_HEIGHT, parent);
         return itemID;
     }
 
     placeExternalPerson(c4Name: string, c4Description: string, id?: string, parent?: string): string {
         let itemID = id ?? getID(22);
-        this.engine.addNode(C4TYPE.ExternalPerson, itemID, c4Name, '', c4Description, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, parent);
+        this.engine.addNode(C4TYPE.ExternalPerson, itemID, c4Name, '', c4Description, PERSON_WIDTH, PERSON_HEIGHT, parent);
         return itemID;
     }
 
@@ -158,14 +160,14 @@ export class MxBuilder {
     }
 
     drawPerson(id:string, c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
-        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, label:this.getPersonLabel(), id:id});
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, c4Type: 'Person', label:this.getPersonLabel(), id:id});
         const cell = obj.ele('mxCell', {style:this.getPersonStyle(), parent:'1', vertex:'1'});
         cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as:'geometry'});
         return id;
     }
 
     drawExternalPerson(id:string, c4Name: string, c4Description: string, x: number, y: number, width: number = 200, height: number = 180): string {
-        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, label:this.getExternalPersonLabel(), id:id});
+        const obj = this.rootNode.ele('object', {placeholders: '1', c4Name:c4Name, c4Description:c4Description, c4Type: 'Person', label:this.getExternalPersonLabel(), id:id});
         const cell = obj.ele('mxCell', {style:this.getExternalPersonStyle(), parent:'1', vertex:'1'});
         cell.ele('mxGeometry', {x:x, y:y, width:width, height:height, as:'geometry'});
         return id;
