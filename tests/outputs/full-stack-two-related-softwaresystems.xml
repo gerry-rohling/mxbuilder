@@ -15,7 +15,7 @@
             <mxGeometry x="328" y="48" width="240" height="120" as="geometry"/>
           </mxCell>
         </object>
-        <object placeholders="1" c4Type="Relationship" c4Technology="" c4Description="Rel 1 Desc" label="&lt;div style=&quot;text-align: left&quot;&gt;&lt;div style=&quot;text-align: center&quot;&gt;&lt;b&gt;%c4Description%&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center&quot;&gt;[%c4Technology%]&lt;/div&gt;&lt;/div&gt;" id="ww55kbxmw5k9t5a38u8ao8">
+        <object placeholders="1" c4Type="Relationship" c4Technology="" c4Description="Rel 1 Desc" label="&lt;div style=&quot;text-align: left&quot;&gt;&lt;div style=&quot;text-align: center&quot;&gt;&lt;b&gt;%c4Description%&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center&quot;&gt;[%c4Technology%]&lt;/div&gt;&lt;/div&gt;" id="ioxm8akg6wd192pt5yh8zn">
           <mxCell style="endArrow=blockThin;html=1;fontSize=10;fontColor=#404040;strokeWidth=1;endFill=1;strokeColor=#828282;elbow=vertical;metaEdit=1;endSize=14;startSize=14;jumpStyle=arc;jumpSize=16;rounded=0;" parent="1" source="ss001" target="ss002" edge="1">
             <mxGeometry width="40" height="0" relative="1" as="geometry">
               <mxPoint x="288" y="108" as="sourcePoint"/>
