@@ -1,6 +1,6 @@
 {
   "name": "mxbuilder",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A library that allows you to build C4 MX drawing files with auto placement of entities.",
   "main": "dist/src/MxBuilder.js",
   "types": "dist/src/MxBuilder.d.ts",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "elkjs": "^0.11.0",
-    "fast-xml-parser": "^5.3.4",
+    "fast-xml-parser": "^5.3.6",
     "xmlbuilder2": "^4.0.3",
     "xpath": "^0.0.34"
   }
